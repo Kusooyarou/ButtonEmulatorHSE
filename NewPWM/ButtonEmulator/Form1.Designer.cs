@@ -31,16 +31,12 @@ namespace ButtonEmulator
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            System.Text.ASCIIEncoding asciiEncodingSealed2 = new System.Text.ASCIIEncoding();
-            System.Text.DecoderReplacementFallback decoderReplacementFallback2 = new System.Text.DecoderReplacementFallback();
-            System.Text.EncoderReplacementFallback encoderReplacementFallback2 = new System.Text.EncoderReplacementFallback();
             button2 = new Button();
             button3 = new Button();
             button4 = new Button();
             buttonConnect = new Button();
             button5 = new Button();
             button6 = new Button();
-            sp = new System.IO.Ports.SerialPort(components);
             label1 = new Label();
             button7 = new Button();
             button8 = new Button();
@@ -121,9 +117,14 @@ namespace ButtonEmulator
             TimeBox = new TextBox();
             DutyCycleBox = new TextBox();
             StartPWM = new Button();
-            button25 = new Button();
+            buttonSavePWM = new Button();
             groupBox1 = new GroupBox();
             groupBox2 = new GroupBox();
+            label4 = new Label();
+            DelayBoxForPWM = new NumericUpDown();
+            groupBox3 = new GroupBox();
+            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            groupBox4 = new GroupBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SpecialPanel.SuspendLayout();
             videoSettings.SuspendLayout();
@@ -136,12 +137,15 @@ namespace ButtonEmulator
             ((System.ComponentModel.ISupportInitialize)delayBox).BeginInit();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)DelayBoxForPWM).BeginInit();
+            groupBox3.SuspendLayout();
+            groupBox4.SuspendLayout();
             SuspendLayout();
             // 
             // button2
             // 
             button2.Enabled = false;
-            button2.Location = new System.Drawing.Point(17, 236);
+            button2.Location = new System.Drawing.Point(5, 139);
             button2.Margin = new Padding(3, 4, 3, 4);
             button2.Name = "button2";
             button2.Size = new System.Drawing.Size(103, 26);
@@ -156,7 +160,7 @@ namespace ButtonEmulator
             // button3
             // 
             button3.Enabled = false;
-            button3.Location = new System.Drawing.Point(17, 268);
+            button3.Location = new System.Drawing.Point(5, 173);
             button3.Margin = new Padding(3, 4, 3, 4);
             button3.Name = "button3";
             button3.Size = new System.Drawing.Size(103, 26);
@@ -171,7 +175,7 @@ namespace ButtonEmulator
             // button4
             // 
             button4.Enabled = false;
-            button4.Location = new System.Drawing.Point(17, 302);
+            button4.Location = new System.Drawing.Point(5, 207);
             button4.Margin = new Padding(3, 4, 3, 4);
             button4.Name = "button4";
             button4.Size = new System.Drawing.Size(103, 26);
@@ -185,7 +189,7 @@ namespace ButtonEmulator
             // 
             // buttonConnect
             // 
-            buttonConnect.Location = new System.Drawing.Point(184, 8);
+            buttonConnect.Location = new System.Drawing.Point(168, 18);
             buttonConnect.Margin = new Padding(3, 4, 3, 4);
             buttonConnect.Name = "buttonConnect";
             buttonConnect.Size = new System.Drawing.Size(156, 26);
@@ -197,7 +201,7 @@ namespace ButtonEmulator
             // button5
             // 
             button5.Enabled = false;
-            button5.Location = new System.Drawing.Point(17, 336);
+            button5.Location = new System.Drawing.Point(5, 241);
             button5.Margin = new Padding(3, 4, 3, 4);
             button5.Name = "button5";
             button5.Size = new System.Drawing.Size(103, 26);
@@ -212,7 +216,7 @@ namespace ButtonEmulator
             // button6
             // 
             button6.Enabled = false;
-            button6.Location = new System.Drawing.Point(17, 369);
+            button6.Location = new System.Drawing.Point(5, 275);
             button6.Margin = new Padding(3, 4, 3, 4);
             button6.Name = "button6";
             button6.Size = new System.Drawing.Size(103, 26);
@@ -224,29 +228,10 @@ namespace ButtonEmulator
             button6.MouseDown += button_MouseDown;
             button6.MouseUp += button_MouseUp;
             // 
-            // sp
-            // 
-            sp.BaudRate = 9600;
-            sp.DataBits = 8;
-            sp.DiscardNull = false;
-            sp.DtrEnable = false;
-            sp.Handshake = System.IO.Ports.Handshake.None;
-            sp.NewLine = "\n";
-            sp.Parity = System.IO.Ports.Parity.None;
-            sp.ParityReplace = 63;
-            sp.PortName = "COM1";
-            sp.ReadBufferSize = 4096;
-            sp.ReadTimeout = -1;
-            sp.ReceivedBytesThreshold = 1;
-            sp.RtsEnable = false;
-            sp.StopBits = System.IO.Ports.StopBits.One;
-            sp.WriteBufferSize = 2048;
-            sp.WriteTimeout = -1;
-            // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(48, 14);
+            label1.Location = new System.Drawing.Point(38, 23);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(35, 15);
             label1.TabIndex = 8;
@@ -255,7 +240,7 @@ namespace ButtonEmulator
             // button7
             // 
             button7.Enabled = false;
-            button7.Location = new System.Drawing.Point(17, 403);
+            button7.Location = new System.Drawing.Point(5, 309);
             button7.Margin = new Padding(3, 4, 3, 4);
             button7.Name = "button7";
             button7.Size = new System.Drawing.Size(103, 26);
@@ -270,7 +255,7 @@ namespace ButtonEmulator
             // button8
             // 
             button8.Enabled = false;
-            button8.Location = new System.Drawing.Point(17, 436);
+            button8.Location = new System.Drawing.Point(5, 343);
             button8.Margin = new Padding(3, 4, 3, 4);
             button8.Name = "button8";
             button8.Size = new System.Drawing.Size(103, 26);
@@ -285,7 +270,7 @@ namespace ButtonEmulator
             // checkBox_button_type
             // 
             checkBox_button_type.Enabled = false;
-            checkBox_button_type.Location = new System.Drawing.Point(14, 107);
+            checkBox_button_type.Location = new System.Drawing.Point(6, 23);
             checkBox_button_type.Margin = new Padding(3, 4, 3, 4);
             checkBox_button_type.Name = "checkBox_button_type";
             checkBox_button_type.Size = new System.Drawing.Size(325, 26);
@@ -301,7 +286,7 @@ namespace ButtonEmulator
             // button9
             // 
             button9.Enabled = false;
-            button9.Location = new System.Drawing.Point(128, 201);
+            button9.Location = new System.Drawing.Point(114, 105);
             button9.Margin = new Padding(3, 4, 3, 4);
             button9.Name = "button9";
             button9.Size = new System.Drawing.Size(103, 26);
@@ -316,7 +301,7 @@ namespace ButtonEmulator
             // button10
             // 
             button10.Enabled = false;
-            button10.Location = new System.Drawing.Point(128, 236);
+            button10.Location = new System.Drawing.Point(114, 139);
             button10.Margin = new Padding(3, 4, 3, 4);
             button10.Name = "button10";
             button10.Size = new System.Drawing.Size(103, 26);
@@ -331,7 +316,7 @@ namespace ButtonEmulator
             // button11
             // 
             button11.Enabled = false;
-            button11.Location = new System.Drawing.Point(128, 268);
+            button11.Location = new System.Drawing.Point(114, 173);
             button11.Margin = new Padding(3, 4, 3, 4);
             button11.Name = "button11";
             button11.Size = new System.Drawing.Size(103, 26);
@@ -346,7 +331,7 @@ namespace ButtonEmulator
             // button12
             // 
             button12.Enabled = false;
-            button12.Location = new System.Drawing.Point(128, 302);
+            button12.Location = new System.Drawing.Point(114, 207);
             button12.Margin = new Padding(3, 4, 3, 4);
             button12.Name = "button12";
             button12.Size = new System.Drawing.Size(103, 26);
@@ -361,7 +346,7 @@ namespace ButtonEmulator
             // button13
             // 
             button13.Enabled = false;
-            button13.Location = new System.Drawing.Point(128, 336);
+            button13.Location = new System.Drawing.Point(112, 241);
             button13.Margin = new Padding(3, 4, 3, 4);
             button13.Name = "button13";
             button13.Size = new System.Drawing.Size(103, 26);
@@ -376,7 +361,7 @@ namespace ButtonEmulator
             // button14
             // 
             button14.Enabled = false;
-            button14.Location = new System.Drawing.Point(128, 370);
+            button14.Location = new System.Drawing.Point(112, 275);
             button14.Margin = new Padding(3, 4, 3, 4);
             button14.Name = "button14";
             button14.Size = new System.Drawing.Size(103, 26);
@@ -391,7 +376,7 @@ namespace ButtonEmulator
             // button15
             // 
             button15.Enabled = false;
-            button15.Location = new System.Drawing.Point(128, 404);
+            button15.Location = new System.Drawing.Point(112, 309);
             button15.Margin = new Padding(3, 4, 3, 4);
             button15.Name = "button15";
             button15.Size = new System.Drawing.Size(103, 26);
@@ -406,7 +391,7 @@ namespace ButtonEmulator
             // button16
             // 
             button16.Enabled = false;
-            button16.Location = new System.Drawing.Point(128, 437);
+            button16.Location = new System.Drawing.Point(112, 343);
             button16.Margin = new Padding(3, 4, 3, 4);
             button16.Name = "button16";
             button16.Size = new System.Drawing.Size(103, 26);
@@ -421,7 +406,7 @@ namespace ButtonEmulator
             // button17
             // 
             button17.Enabled = false;
-            button17.Location = new System.Drawing.Point(236, 201);
+            button17.Location = new System.Drawing.Point(224, 105);
             button17.Margin = new Padding(3, 4, 3, 4);
             button17.Name = "button17";
             button17.Size = new System.Drawing.Size(103, 26);
@@ -436,7 +421,7 @@ namespace ButtonEmulator
             // button18
             // 
             button18.Enabled = false;
-            button18.Location = new System.Drawing.Point(236, 236);
+            button18.Location = new System.Drawing.Point(223, 139);
             button18.Margin = new Padding(3, 4, 3, 4);
             button18.Name = "button18";
             button18.Size = new System.Drawing.Size(103, 26);
@@ -451,7 +436,7 @@ namespace ButtonEmulator
             // button19
             // 
             button19.Enabled = false;
-            button19.Location = new System.Drawing.Point(236, 268);
+            button19.Location = new System.Drawing.Point(223, 173);
             button19.Margin = new Padding(3, 4, 3, 4);
             button19.Name = "button19";
             button19.Size = new System.Drawing.Size(103, 26);
@@ -466,7 +451,7 @@ namespace ButtonEmulator
             // button20
             // 
             button20.Enabled = false;
-            button20.Location = new System.Drawing.Point(236, 302);
+            button20.Location = new System.Drawing.Point(224, 207);
             button20.Margin = new Padding(3, 4, 3, 4);
             button20.Name = "button20";
             button20.Size = new System.Drawing.Size(103, 26);
@@ -481,7 +466,7 @@ namespace ButtonEmulator
             // button21
             // 
             button21.Enabled = false;
-            button21.Location = new System.Drawing.Point(236, 336);
+            button21.Location = new System.Drawing.Point(221, 241);
             button21.Margin = new Padding(3, 4, 3, 4);
             button21.Name = "button21";
             button21.Size = new System.Drawing.Size(103, 26);
@@ -496,7 +481,7 @@ namespace ButtonEmulator
             // button22
             // 
             button22.Enabled = false;
-            button22.Location = new System.Drawing.Point(236, 370);
+            button22.Location = new System.Drawing.Point(221, 275);
             button22.Margin = new Padding(3, 4, 3, 4);
             button22.Name = "button22";
             button22.Size = new System.Drawing.Size(103, 26);
@@ -511,7 +496,7 @@ namespace ButtonEmulator
             // button23
             // 
             button23.Enabled = false;
-            button23.Location = new System.Drawing.Point(236, 404);
+            button23.Location = new System.Drawing.Point(221, 309);
             button23.Margin = new Padding(3, 4, 3, 4);
             button23.Name = "button23";
             button23.Size = new System.Drawing.Size(103, 26);
@@ -526,7 +511,7 @@ namespace ButtonEmulator
             // button24
             // 
             button24.Enabled = false;
-            button24.Location = new System.Drawing.Point(236, 437);
+            button24.Location = new System.Drawing.Point(221, 343);
             button24.Margin = new Padding(3, 4, 3, 4);
             button24.Name = "button24";
             button24.Size = new System.Drawing.Size(103, 26);
@@ -540,7 +525,7 @@ namespace ButtonEmulator
             // 
             // textBox2
             // 
-            textBox2.Location = new System.Drawing.Point(121, 41);
+            textBox2.Location = new System.Drawing.Point(106, 55);
             textBox2.Margin = new Padding(3, 4, 3, 4);
             textBox2.Name = "textBox2";
             textBox2.Size = new System.Drawing.Size(217, 23);
@@ -549,7 +534,7 @@ namespace ButtonEmulator
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(11, 45);
+            label2.Location = new System.Drawing.Point(6, 58);
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(94, 15);
             label2.TabIndex = 29;
@@ -560,7 +545,7 @@ namespace ButtonEmulator
             checkBoxReverseData1.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
             checkBoxReverseData1.Enabled = false;
             checkBoxReverseData1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            checkBoxReverseData1.Location = new System.Drawing.Point(17, 171);
+            checkBoxReverseData1.Location = new System.Drawing.Point(5, 73);
             checkBoxReverseData1.Margin = new Padding(3, 4, 3, 4);
             checkBoxReverseData1.Name = "checkBoxReverseData1";
             checkBoxReverseData1.Size = new System.Drawing.Size(103, 24);
@@ -573,7 +558,7 @@ namespace ButtonEmulator
             // 
             checkBoxReverseData2.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
             checkBoxReverseData2.Enabled = false;
-            checkBoxReverseData2.Location = new System.Drawing.Point(128, 171);
+            checkBoxReverseData2.Location = new System.Drawing.Point(112, 73);
             checkBoxReverseData2.Margin = new Padding(3, 4, 3, 4);
             checkBoxReverseData2.Name = "checkBoxReverseData2";
             checkBoxReverseData2.Size = new System.Drawing.Size(103, 23);
@@ -586,7 +571,7 @@ namespace ButtonEmulator
             // 
             checkBoxReverseData3.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
             checkBoxReverseData3.Enabled = false;
-            checkBoxReverseData3.Location = new System.Drawing.Point(236, 171);
+            checkBoxReverseData3.Location = new System.Drawing.Point(224, 73);
             checkBoxReverseData3.Margin = new Padding(3, 4, 3, 4);
             checkBoxReverseData3.Name = "checkBoxReverseData3";
             checkBoxReverseData3.Size = new System.Drawing.Size(103, 23);
@@ -597,7 +582,7 @@ namespace ButtonEmulator
             // 
             // testbench_button
             // 
-            testbench_button.Location = new System.Drawing.Point(14, 69);
+            testbench_button.Location = new System.Drawing.Point(5, 81);
             testbench_button.Margin = new Padding(3, 4, 3, 4);
             testbench_button.Name = "testbench_button";
             testbench_button.Size = new System.Drawing.Size(140, 26);
@@ -608,7 +593,7 @@ namespace ButtonEmulator
             // 
             // testbench_name
             // 
-            testbench_name.Location = new System.Drawing.Point(161, 71);
+            testbench_name.Location = new System.Drawing.Point(151, 84);
             testbench_name.Margin = new Padding(3, 4, 3, 4);
             testbench_name.Name = "testbench_name";
             testbench_name.Size = new System.Drawing.Size(142, 23);
@@ -620,17 +605,17 @@ namespace ButtonEmulator
             pictureBox1.BackgroundImage = Properties.Resources.camera;
             pictureBox1.BackgroundImageLayout = ImageLayout.Center;
             pictureBox1.BorderStyle = BorderStyle.FixedSingle;
-            pictureBox1.Location = new System.Drawing.Point(347, 41);
+            pictureBox1.Location = new System.Drawing.Point(370, 72);
             pictureBox1.Margin = new Padding(3, 4, 3, 4);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new System.Drawing.Size(643, 442);
+            pictureBox1.Size = new System.Drawing.Size(647, 426);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 36;
             pictureBox1.TabStop = false;
             // 
             // button_cam_start
             // 
-            button_cam_start.Location = new System.Drawing.Point(609, 8);
+            button_cam_start.Location = new System.Drawing.Point(589, 18);
             button_cam_start.Margin = new Padding(3, 4, 3, 4);
             button_cam_start.Name = "button_cam_start";
             button_cam_start.Size = new System.Drawing.Size(140, 26);
@@ -643,7 +628,7 @@ namespace ButtonEmulator
             // 
             comboBox_cameras.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBox_cameras.FormattingEnabled = true;
-            comboBox_cameras.Location = new System.Drawing.Point(380, 10);
+            comboBox_cameras.Location = new System.Drawing.Point(362, 21);
             comboBox_cameras.Margin = new Padding(3, 4, 3, 4);
             comboBox_cameras.Name = "comboBox_cameras";
             comboBox_cameras.Size = new System.Drawing.Size(221, 23);
@@ -654,7 +639,7 @@ namespace ButtonEmulator
             // 
             button_cam_scan.BackgroundImage = Properties.Resources.search;
             button_cam_scan.BackgroundImageLayout = ImageLayout.Zoom;
-            button_cam_scan.Location = new System.Drawing.Point(347, 8);
+            button_cam_scan.Location = new System.Drawing.Point(330, 18);
             button_cam_scan.Margin = new Padding(3, 4, 3, 4);
             button_cam_scan.Name = "button_cam_scan";
             button_cam_scan.Size = new System.Drawing.Size(26, 26);
@@ -664,7 +649,7 @@ namespace ButtonEmulator
             // 
             // button_cam_stop
             // 
-            button_cam_stop.Location = new System.Drawing.Point(756, 8);
+            button_cam_stop.Location = new System.Drawing.Point(735, 17);
             button_cam_stop.Margin = new Padding(3, 4, 3, 4);
             button_cam_stop.Name = "button_cam_stop";
             button_cam_stop.Size = new System.Drawing.Size(140, 26);
@@ -677,7 +662,7 @@ namespace ButtonEmulator
             // 
             comboBox_arduino.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBox_arduino.FormattingEnabled = true;
-            comboBox_arduino.Location = new System.Drawing.Point(92, 10);
+            comboBox_arduino.Location = new System.Drawing.Point(79, 20);
             comboBox_arduino.Margin = new Padding(3, 4, 3, 4);
             comboBox_arduino.Name = "comboBox_arduino";
             comboBox_arduino.Size = new System.Drawing.Size(83, 23);
@@ -687,7 +672,7 @@ namespace ButtonEmulator
             // 
             button_com_scan.BackgroundImage = Properties.Resources.search;
             button_com_scan.BackgroundImageLayout = ImageLayout.Zoom;
-            button_com_scan.Location = new System.Drawing.Point(14, 8);
+            button_com_scan.Location = new System.Drawing.Point(6, 18);
             button_com_scan.Margin = new Padding(3, 4, 3, 4);
             button_com_scan.Name = "button_com_scan";
             button_com_scan.Size = new System.Drawing.Size(26, 26);
@@ -698,7 +683,7 @@ namespace ButtonEmulator
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new System.Drawing.Point(14, 152);
+            label3.Location = new System.Drawing.Point(5, 54);
             label3.Name = "label3";
             label3.Size = new System.Drawing.Size(159, 15);
             label3.TabIndex = 46;
@@ -708,7 +693,7 @@ namespace ButtonEmulator
             // 
             button_create_screen.BackgroundImage = Properties.Resources.download;
             button_create_screen.BackgroundImageLayout = ImageLayout.Zoom;
-            button_create_screen.Location = new System.Drawing.Point(903, 8);
+            button_create_screen.Location = new System.Drawing.Point(881, 18);
             button_create_screen.Margin = new Padding(3, 4, 3, 4);
             button_create_screen.Name = "button_create_screen";
             button_create_screen.Size = new System.Drawing.Size(26, 26);
@@ -723,7 +708,7 @@ namespace ButtonEmulator
             // 
             // button_select_testbench
             // 
-            button_select_testbench.Location = new System.Drawing.Point(310, 69);
+            button_select_testbench.Location = new System.Drawing.Point(299, 81);
             button_select_testbench.Margin = new Padding(3, 4, 3, 4);
             button_select_testbench.Name = "button_select_testbench";
             button_select_testbench.Size = new System.Drawing.Size(30, 26);
@@ -735,7 +720,7 @@ namespace ButtonEmulator
             // button1
             // 
             button1.Enabled = false;
-            button1.Location = new System.Drawing.Point(17, 202);
+            button1.Location = new System.Drawing.Point(5, 105);
             button1.Margin = new Padding(3, 4, 3, 4);
             button1.Name = "button1";
             button1.Size = new System.Drawing.Size(103, 26);
@@ -766,17 +751,17 @@ namespace ButtonEmulator
             SpecialPanel.Location = new System.Drawing.Point(1082, 14);
             SpecialPanel.Margin = new Padding(3, 2, 3, 2);
             SpecialPanel.Name = "SpecialPanel";
-            SpecialPanel.Size = new System.Drawing.Size(340, 69);
+            SpecialPanel.Size = new System.Drawing.Size(340, 92);
             SpecialPanel.TabIndex = 17;
             SpecialPanel.Visible = false;
             // 
             // VideoSettingsButton
             // 
             VideoSettingsButton.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            VideoSettingsButton.Location = new System.Drawing.Point(164, 41);
+            VideoSettingsButton.Location = new System.Drawing.Point(164, 48);
             VideoSettingsButton.Margin = new Padding(3, 2, 3, 2);
             VideoSettingsButton.Name = "VideoSettingsButton";
-            VideoSettingsButton.Size = new System.Drawing.Size(138, 27);
+            VideoSettingsButton.Size = new System.Drawing.Size(138, 37);
             VideoSettingsButton.TabIndex = 0;
             VideoSettingsButton.Text = "Настройки записи";
             VideoSettingsButton.UseVisualStyleBackColor = true;
@@ -785,10 +770,10 @@ namespace ButtonEmulator
             // VideoStopButton
             // 
             VideoStopButton.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            VideoStopButton.Location = new System.Drawing.Point(9, 41);
+            VideoStopButton.Location = new System.Drawing.Point(9, 48);
             VideoStopButton.Margin = new Padding(3, 2, 3, 2);
             VideoStopButton.Name = "VideoStopButton";
-            VideoStopButton.Size = new System.Drawing.Size(151, 27);
+            VideoStopButton.Size = new System.Drawing.Size(151, 33);
             VideoStopButton.TabIndex = 0;
             VideoStopButton.Text = "Стоп";
             VideoStopButton.UseVisualStyleBackColor = true;
@@ -798,10 +783,10 @@ namespace ButtonEmulator
             // VideoStartButton
             // 
             VideoStartButton.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            VideoStartButton.Location = new System.Drawing.Point(9, 41);
+            VideoStartButton.Location = new System.Drawing.Point(9, 48);
             VideoStartButton.Margin = new Padding(3, 2, 3, 2);
             VideoStartButton.Name = "VideoStartButton";
-            VideoStartButton.Size = new System.Drawing.Size(151, 21);
+            VideoStartButton.Size = new System.Drawing.Size(151, 37);
             VideoStartButton.TabIndex = 0;
             VideoStartButton.Text = "Начать запись";
             VideoStartButton.UseVisualStyleBackColor = true;
@@ -810,10 +795,10 @@ namespace ButtonEmulator
             // ArduinoButton
             // 
             ArduinoButton.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            ArduinoButton.Location = new System.Drawing.Point(9, -7);
+            ArduinoButton.Location = new System.Drawing.Point(9, 2);
             ArduinoButton.Margin = new Padding(3, 2, 3, 2);
             ArduinoButton.Name = "ArduinoButton";
-            ArduinoButton.Size = new System.Drawing.Size(151, 44);
+            ArduinoButton.Size = new System.Drawing.Size(151, 35);
             ArduinoButton.TabIndex = 0;
             ArduinoButton.Text = "Перепрошивка Arduino";
             ArduinoButton.UseVisualStyleBackColor = true;
@@ -822,10 +807,10 @@ namespace ButtonEmulator
             // CloseButton
             // 
             CloseButton.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            CloseButton.Location = new System.Drawing.Point(164, -1);
+            CloseButton.Location = new System.Drawing.Point(164, 2);
             CloseButton.Margin = new Padding(3, 2, 3, 2);
             CloseButton.Name = "CloseButton";
-            CloseButton.Size = new System.Drawing.Size(138, 38);
+            CloseButton.Size = new System.Drawing.Size(138, 35);
             CloseButton.TabIndex = 0;
             CloseButton.Text = "Закрыть программу";
             CloseButton.UseVisualStyleBackColor = true;
@@ -847,10 +832,10 @@ namespace ButtonEmulator
             videoSettings.Controls.Add(qualityText);
             videoSettings.Controls.Add(routeText);
             videoSettings.Controls.Add(nameText);
-            videoSettings.Location = new System.Drawing.Point(1083, 107);
+            videoSettings.Location = new System.Drawing.Point(1082, 235);
             videoSettings.Margin = new Padding(3, 2, 3, 2);
             videoSettings.Name = "videoSettings";
-            videoSettings.Size = new System.Drawing.Size(340, 176);
+            videoSettings.Size = new System.Drawing.Size(340, 178);
             videoSettings.TabIndex = 18;
             videoSettings.Visible = false;
             // 
@@ -1026,10 +1011,10 @@ namespace ButtonEmulator
             arduinoPanel.Controls.Add(arduinoPath);
             arduinoPanel.Controls.Add(arduinoPathSelector);
             arduinoPanel.Controls.Add(arduinoPathText);
-            arduinoPanel.Location = new System.Drawing.Point(1082, 82);
+            arduinoPanel.Location = new System.Drawing.Point(1082, 110);
             arduinoPanel.Margin = new Padding(3, 2, 3, 2);
             arduinoPanel.Name = "arduinoPanel";
-            arduinoPanel.Size = new System.Drawing.Size(340, 102);
+            arduinoPanel.Size = new System.Drawing.Size(340, 121);
             arduinoPanel.TabIndex = 19;
             arduinoPanel.Visible = false;
             // 
@@ -1118,6 +1103,7 @@ namespace ButtonEmulator
             // 
             // _txtCol1
             // 
+            _txtCol1.Enabled = false;
             _txtCol1.Location = new System.Drawing.Point(3, 27);
             _txtCol1.Margin = new Padding(3, 2, 3, 2);
             _txtCol1.MaxLength = 8;
@@ -1128,6 +1114,7 @@ namespace ButtonEmulator
             // 
             // _txtCol2
             // 
+            _txtCol2.Enabled = false;
             _txtCol2.Location = new System.Drawing.Point(114, 27);
             _txtCol2.Margin = new Padding(3, 2, 3, 2);
             _txtCol2.MaxLength = 8;
@@ -1138,6 +1125,7 @@ namespace ButtonEmulator
             // 
             // _txtCol3
             // 
+            _txtCol3.Enabled = false;
             _txtCol3.Location = new System.Drawing.Point(222, 27);
             _txtCol3.Margin = new Padding(3, 2, 3, 2);
             _txtCol3.MaxLength = 8;
@@ -1160,7 +1148,8 @@ namespace ButtonEmulator
             // 
             // delayBox
             // 
-            delayBox.Location = new System.Drawing.Point(189, 75);
+            delayBox.Enabled = false;
+            delayBox.Location = new System.Drawing.Point(215, 71);
             delayBox.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             delayBox.Minimum = new decimal(new int[] { 1000, 0, 0, 0 });
             delayBox.Name = "delayBox";
@@ -1173,23 +1162,23 @@ namespace ButtonEmulator
             label5.AutoSize = true;
             label5.Location = new System.Drawing.Point(3, 73);
             label5.Name = "label5";
-            label5.Size = new System.Drawing.Size(180, 15);
+            label5.Size = new System.Drawing.Size(206, 15);
             label5.TabIndex = 56;
-            label5.Text = "Ввод задержки нажатия кнопок";
+            label5.Text = "Ввод задержки нажатия кнопок (мс)";
             // 
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new System.Drawing.Point(0, 29);
+            label6.Location = new System.Drawing.Point(0, 32);
             label6.Name = "label6";
-            label6.Size = new System.Drawing.Size(42, 15);
+            label6.Size = new System.Drawing.Size(68, 15);
             label6.TabIndex = 57;
-            label6.Text = "Время";
+            label6.Text = "Время (мс)";
             // 
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new System.Drawing.Point(0, 65);
+            label7.Location = new System.Drawing.Point(0, 70);
             label7.Name = "label7";
             label7.Size = new System.Drawing.Size(73, 15);
             label7.TabIndex = 58;
@@ -1197,7 +1186,7 @@ namespace ButtonEmulator
             // 
             // TimeBox
             // 
-            TimeBox.Location = new System.Drawing.Point(79, 21);
+            TimeBox.Location = new System.Drawing.Point(74, 29);
             TimeBox.Margin = new Padding(3, 2, 3, 2);
             TimeBox.MaxLength = 10000;
             TimeBox.Name = "TimeBox";
@@ -1207,7 +1196,7 @@ namespace ButtonEmulator
             // 
             // DutyCycleBox
             // 
-            DutyCycleBox.Location = new System.Drawing.Point(79, 60);
+            DutyCycleBox.Location = new System.Drawing.Point(79, 68);
             DutyCycleBox.Margin = new Padding(3, 2, 3, 2);
             DutyCycleBox.MaxLength = 10000;
             DutyCycleBox.Name = "DutyCycleBox";
@@ -1217,7 +1206,8 @@ namespace ButtonEmulator
             // 
             // StartPWM
             // 
-            StartPWM.Location = new System.Drawing.Point(188, 20);
+            StartPWM.Enabled = false;
+            StartPWM.Location = new System.Drawing.Point(183, 28);
             StartPWM.Name = "StartPWM";
             StartPWM.Size = new System.Drawing.Size(75, 23);
             StartPWM.TabIndex = 61;
@@ -1225,14 +1215,14 @@ namespace ButtonEmulator
             StartPWM.UseVisualStyleBackColor = true;
             StartPWM.Click += StartPWM_Click;
             // 
-            // button25
+            // buttonSavePWM
             // 
-            button25.Location = new System.Drawing.Point(291, 17);
-            button25.Name = "button25";
-            button25.Size = new System.Drawing.Size(75, 27);
-            button25.TabIndex = 63;
-            button25.Text = "save";
-            button25.UseVisualStyleBackColor = true;
+            buttonSavePWM.Location = new System.Drawing.Point(264, 26);
+            buttonSavePWM.Name = "buttonSavePWM";
+            buttonSavePWM.Size = new System.Drawing.Size(75, 27);
+            buttonSavePWM.TabIndex = 63;
+            buttonSavePWM.Text = "save";
+            buttonSavePWM.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
@@ -1242,7 +1232,7 @@ namespace ButtonEmulator
             groupBox1.Controls.Add(label5);
             groupBox1.Controls.Add(delayBox);
             groupBox1.Controls.Add(_buttonStart);
-            groupBox1.Location = new System.Drawing.Point(14, 487);
+            groupBox1.Location = new System.Drawing.Point(9, 500);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new System.Drawing.Size(431, 104);
             groupBox1.TabIndex = 65;
@@ -1251,74 +1241,116 @@ namespace ButtonEmulator
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(DelayBoxForPWM);
+            groupBox2.Controls.Add(label4);
             groupBox2.Controls.Add(label6);
             groupBox2.Controls.Add(TimeBox);
             groupBox2.Controls.Add(label7);
             groupBox2.Controls.Add(DutyCycleBox);
-            groupBox2.Controls.Add(button25);
+            groupBox2.Controls.Add(buttonSavePWM);
             groupBox2.Controls.Add(StartPWM);
-            groupBox2.Location = new System.Drawing.Point(451, 490);
+            groupBox2.Location = new System.Drawing.Point(446, 503);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new System.Drawing.Size(478, 101);
+            groupBox2.Size = new System.Drawing.Size(497, 101);
             groupBox2.TabIndex = 66;
             groupBox2.TabStop = false;
             groupBox2.Text = "ШИМ";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new System.Drawing.Point(188, 74);
+            label4.Name = "label4";
+            label4.Size = new System.Drawing.Size(165, 15);
+            label4.TabIndex = 57;
+            label4.Text = "Задержка шим-сигнала (мс)";
+            // 
+            // DelayBoxForPWM
+            // 
+            DelayBoxForPWM.Enabled = false;
+            DelayBoxForPWM.Location = new System.Drawing.Point(359, 68);
+            DelayBoxForPWM.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+            DelayBoxForPWM.Minimum = new decimal(new int[] { 1000, 0, 0, 0 });
+            DelayBoxForPWM.Name = "DelayBoxForPWM";
+            DelayBoxForPWM.Size = new System.Drawing.Size(120, 23);
+            DelayBoxForPWM.TabIndex = 64;
+            DelayBoxForPWM.Value = new decimal(new int[] { 1000, 0, 0, 0 });
+            // 
+            // groupBox3
+            // 
+            groupBox3.Controls.Add(button1);
+            groupBox3.Controls.Add(checkBoxReverseData1);
+            groupBox3.Controls.Add(label3);
+            groupBox3.Controls.Add(button9);
+            groupBox3.Controls.Add(checkBoxReverseData2);
+            groupBox3.Controls.Add(button17);
+            groupBox3.Controls.Add(checkBoxReverseData3);
+            groupBox3.Controls.Add(button2);
+            groupBox3.Controls.Add(button10);
+            groupBox3.Controls.Add(button18);
+            groupBox3.Controls.Add(button3);
+            groupBox3.Controls.Add(button4);
+            groupBox3.Controls.Add(button11);
+            groupBox3.Controls.Add(button19);
+            groupBox3.Controls.Add(button12);
+            groupBox3.Controls.Add(button20);
+            groupBox3.Controls.Add(button5);
+            groupBox3.Controls.Add(button6);
+            groupBox3.Controls.Add(button7);
+            groupBox3.Controls.Add(button8);
+            groupBox3.Controls.Add(checkBox_button_type);
+            groupBox3.Controls.Add(button24);
+            groupBox3.Controls.Add(button13);
+            groupBox3.Controls.Add(button23);
+            groupBox3.Controls.Add(button14);
+            groupBox3.Controls.Add(button22);
+            groupBox3.Controls.Add(button15);
+            groupBox3.Controls.Add(button21);
+            groupBox3.Controls.Add(button16);
+            groupBox3.Location = new System.Drawing.Point(9, 119);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Size = new System.Drawing.Size(338, 379);
+            groupBox3.TabIndex = 67;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "Управление";
+            // 
+            // groupBox4
+            // 
+            groupBox4.Controls.Add(button_com_scan);
+            groupBox4.Controls.Add(label2);
+            groupBox4.Controls.Add(testbench_button);
+            groupBox4.Controls.Add(textBox2);
+            groupBox4.Controls.Add(testbench_name);
+            groupBox4.Controls.Add(button_select_testbench);
+            groupBox4.Controls.Add(label1);
+            groupBox4.Controls.Add(comboBox_arduino);
+            groupBox4.Controls.Add(button_create_screen);
+            groupBox4.Controls.Add(buttonConnect);
+            groupBox4.Controls.Add(button_cam_stop);
+            groupBox4.Controls.Add(comboBox_cameras);
+            groupBox4.Controls.Add(button_cam_start);
+            groupBox4.Controls.Add(button_cam_scan);
+            groupBox4.Location = new System.Drawing.Point(8, 5);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Size = new System.Drawing.Size(935, 112);
+            groupBox4.TabIndex = 68;
+            groupBox4.TabStop = false;
+            groupBox4.Text = "Настройки";
             // 
             // Form1
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(1431, 603);
+            ClientSize = new System.Drawing.Size(1431, 647);
             ControlBox = false;
-            Controls.Add(groupBox2);
+            Controls.Add(groupBox3);
             Controls.Add(pictureBox1);
+            Controls.Add(groupBox4);
+            Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             Controls.Add(arduinoPanel);
             Controls.Add(videoSettings);
             Controls.Add(SpecialPanel);
-            Controls.Add(button1);
-            Controls.Add(button_select_testbench);
-            Controls.Add(button_create_screen);
-            Controls.Add(label3);
-            Controls.Add(button_com_scan);
-            Controls.Add(comboBox_arduino);
-            Controls.Add(button_cam_scan);
-            Controls.Add(comboBox_cameras);
-            Controls.Add(button_cam_stop);
-            Controls.Add(button_cam_start);
-            Controls.Add(testbench_name);
-            Controls.Add(testbench_button);
-            Controls.Add(checkBoxReverseData3);
-            Controls.Add(checkBoxReverseData2);
-            Controls.Add(checkBoxReverseData1);
-            Controls.Add(textBox2);
-            Controls.Add(label2);
-            Controls.Add(button24);
-            Controls.Add(button23);
-            Controls.Add(button22);
-            Controls.Add(button21);
-            Controls.Add(button20);
-            Controls.Add(button19);
-            Controls.Add(button18);
-            Controls.Add(button17);
-            Controls.Add(button16);
-            Controls.Add(button15);
-            Controls.Add(button14);
-            Controls.Add(button13);
-            Controls.Add(button12);
-            Controls.Add(button11);
-            Controls.Add(button10);
-            Controls.Add(button9);
-            Controls.Add(checkBox_button_type);
-            Controls.Add(button8);
-            Controls.Add(button7);
-            Controls.Add(label1);
-            Controls.Add(button6);
-            Controls.Add(button5);
-            Controls.Add(buttonConnect);
-            Controls.Add(button4);
-            Controls.Add(button3);
-            Controls.Add(button2);
             Controls.Add(SpecialFeaturesButton);
             Controls.Add(LoginUserPicture);
             KeyPreview = true;
@@ -1329,7 +1361,7 @@ namespace ButtonEmulator
             Name = "Form1";
             SizeGripStyle = SizeGripStyle.Hide;
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Butt Emulator";
+            Text = "Button Emulator";
             TopMost = true;
             WindowState = FormWindowState.Maximized;
             FormClosing += Form1_FormClosing;
@@ -1351,8 +1383,12 @@ namespace ButtonEmulator
             groupBox1.PerformLayout();
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)DelayBoxForPWM).EndInit();
+            groupBox3.ResumeLayout(false);
+            groupBox3.PerformLayout();
+            groupBox4.ResumeLayout(false);
+            groupBox4.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         private void SpecialFeaturesButton_MouseEnter1(object sender, System.EventArgs e)
@@ -1363,7 +1399,6 @@ namespace ButtonEmulator
         #endregion
 
         private System.Windows.Forms.Button buttonConnect;
-        private System.IO.Ports.SerialPort sp;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox checkBox_button_type;
         private System.Windows.Forms.SaveFileDialog saveFileDialog_create_screen;
@@ -1450,9 +1485,14 @@ namespace ButtonEmulator
         private TextBox TimeBox;
         private TextBox DutyCycleBox;
         private Button StartPWM;
-        private Button button25;
+        private Button buttonSavePWM;
         private GroupBox groupBox1;
         private GroupBox groupBox2;
+        private NumericUpDown DelayBoxForPWM;
+        private Label label4;
+        private GroupBox groupBox3;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private GroupBox groupBox4;
     }
 }
 

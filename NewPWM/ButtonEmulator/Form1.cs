@@ -17,6 +17,8 @@ namespace ButtonEmulator
 {
     public partial class Form1 : Form
     {
+        private System.IO.Ports.SerialPort sp;
+
         // для подключения по Serial
         private bool is_connected = false;
         private string[] portnames;
@@ -38,7 +40,7 @@ namespace ButtonEmulator
         private bool[] button_state;
         private List<Button> buttons;
         private Color default_backcolor = SystemColors.Control;
-        private Color active_backcolor = Color.Red;
+        private Color active_backcolor = Color.Green;
 
 
         private bool is_receive_1 = false;
@@ -63,13 +65,26 @@ namespace ButtonEmulator
         {
             InitializeComponent();
 
-            sp = new SerialPort();
+            sp = new System.IO.Ports.SerialPort(components)
+            {
+                BaudRate = 9600,
+                DataBits = 8,
+                DiscardNull = false,
+                DtrEnable = false,
+                Handshake = System.IO.Ports.Handshake.None,
+                NewLine = "\n",
+                Parity = System.IO.Ports.Parity.None,
+                ParityReplace = 63,
+                PortName = "COM1",
+                ReadBufferSize = 4096,
+                ReadTimeout = 300,
+                ReceivedBytesThreshold = 1,
+                RtsEnable = false,
+                StopBits = System.IO.Ports.StopBits.One,
+                WriteBufferSize = 2048,
+                WriteTimeout = -1
+            };
             sp.DataReceived += sp_DataReceived;
-            sp.BaudRate = 9600;
-            sp.Parity = Parity.None;
-            sp.StopBits = StopBits.One;
-            sp.DataBits = 8;
-            sp.ReadTimeout = 300;
 
             checkBoxes =
             [
@@ -209,6 +224,20 @@ namespace ButtonEmulator
 
         private void buttonConnect_Click(object sender, EventArgs e)
         {
+            var controls = new List<Control>()
+            {
+                _buttonStart,
+                StartPWM,
+                buttonSavePWM,
+                DutyCycleBox,
+                _txtCol1,
+                _txtCol2,
+                _txtCol3,
+                delayBox,
+                DelayBoxForPWM
+            };
+
+
             if (is_connected)
             {
                 try
@@ -242,8 +271,10 @@ namespace ButtonEmulator
                     t.Enabled = false;
                 }
 
-                _buttonStart.Enabled = false;
-                StartPWM.Enabled = false;
+                foreach(var c in  controls)
+                {
+                    c.Enabled = false;
+                }
             }
             else
             {
@@ -279,8 +310,10 @@ namespace ButtonEmulator
                             t.Enabled = true;
                         }
 
-                        _buttonStart.Enabled = true;
-                        StartPWM.Enabled = true;
+                        foreach (var c in controls)
+                        {
+                            c.Enabled = true;
+                        }
                     }
                     else
                     {
@@ -1070,12 +1103,20 @@ namespace ButtonEmulator
                 int timeInMs = int.Parse(TimeBox.Text);
                 int dutyCycle = int.Parse(DutyCycleBox.Text);
 
-                //TODO : validation: timeInMs : 0..10000
-                //                   dutyCycle 0..255
+                if (dutyCycle < 0 || dutyCycle > 255)
+                {
+                    MessageBox.Show("Скважность должна быть в пределах от 0 до 255");
+                    return;
+                }
+                if (timeInMs < 0)
+                {
+                    MessageBox.Show("Время должно быть положительным");
+                    return;
+                }
 
                 StartPWM.Text = "off";
                 _pwmTimer.Interval = timeInMs;
-                int delay = (int)delayBox.Value; //TODO: use own delay text edit box 
+                int delay = (int)DelayBoxForPWM.Value; 
                 _pwmTimer.Start();
 
                 while (IsPwmSending())
