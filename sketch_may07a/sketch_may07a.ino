@@ -150,10 +150,6 @@ void loop() {
     {
       readdata = readdata.substring(3);
     }
-    else if (readdata.startsWith("PWM50#")){
-      analogWrite(PWM_PIN, 50);
-      readdata = readdata.substring(6);
-    }
     else if (readdata.startsWith("PWM")) {
       int endOfPwm = readdata.indexOf('#');
       if (endOfPwm != -1){

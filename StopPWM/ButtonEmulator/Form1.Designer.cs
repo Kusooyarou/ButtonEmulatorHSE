@@ -118,11 +118,11 @@ namespace ButtonEmulator
             buttonSavePWM = new Button();
             groupBox1 = new GroupBox();
             groupBox2 = new GroupBox();
-            DelayBoxForPWM = new NumericUpDown();
-            label4 = new Label();
+            StopPWM = new Button();
             groupBox3 = new GroupBox();
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             groupBox4 = new GroupBox();
+            label4 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SpecialPanel.SuspendLayout();
             videoSettings.SuspendLayout();
@@ -135,7 +135,6 @@ namespace ButtonEmulator
             ((System.ComponentModel.ISupportInitialize)delayBox).BeginInit();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)DelayBoxForPWM).BeginInit();
             groupBox3.SuspendLayout();
             groupBox4.SuspendLayout();
             SuspendLayout();
@@ -1196,12 +1195,13 @@ namespace ButtonEmulator
             // 
             // buttonSavePWM
             // 
-            buttonSavePWM.Location = new System.Drawing.Point(264, 28);
+            buttonSavePWM.Location = new System.Drawing.Point(145, 610);
             buttonSavePWM.Name = "buttonSavePWM";
             buttonSavePWM.Size = new System.Drawing.Size(75, 23);
             buttonSavePWM.TabIndex = 63;
             buttonSavePWM.Text = "save";
             buttonSavePWM.UseVisualStyleBackColor = true;
+            buttonSavePWM.Click += buttonSavePWM_Click;
             // 
             // groupBox1
             // 
@@ -1220,11 +1220,9 @@ namespace ButtonEmulator
             // 
             // groupBox2
             // 
-            groupBox2.Controls.Add(DelayBoxForPWM);
-            groupBox2.Controls.Add(label4);
+            groupBox2.Controls.Add(StopPWM);
             groupBox2.Controls.Add(label7);
             groupBox2.Controls.Add(DutyCycleBox);
-            groupBox2.Controls.Add(buttonSavePWM);
             groupBox2.Controls.Add(StartPWM);
             groupBox2.Location = new System.Drawing.Point(446, 503);
             groupBox2.Name = "groupBox2";
@@ -1233,25 +1231,16 @@ namespace ButtonEmulator
             groupBox2.TabStop = false;
             groupBox2.Text = "ШИМ";
             // 
-            // DelayBoxForPWM
+            // StopPWM
             // 
-            DelayBoxForPWM.Enabled = false;
-            DelayBoxForPWM.Location = new System.Drawing.Point(171, 70);
-            DelayBoxForPWM.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
-            DelayBoxForPWM.Minimum = new decimal(new int[] { 1000, 0, 0, 0 });
-            DelayBoxForPWM.Name = "DelayBoxForPWM";
-            DelayBoxForPWM.Size = new System.Drawing.Size(120, 23);
-            DelayBoxForPWM.TabIndex = 64;
-            DelayBoxForPWM.Value = new decimal(new int[] { 1000, 0, 0, 0 });
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new System.Drawing.Point(0, 76);
-            label4.Name = "label4";
-            label4.Size = new System.Drawing.Size(165, 15);
-            label4.TabIndex = 57;
-            label4.Text = "Задержка шим-сигнала (мс)";
+            StopPWM.Enabled = false;
+            StopPWM.Location = new System.Drawing.Point(264, 29);
+            StopPWM.Name = "StopPWM";
+            StopPWM.Size = new System.Drawing.Size(75, 23);
+            StopPWM.TabIndex = 64;
+            StopPWM.Text = "Выкл";
+            StopPWM.UseVisualStyleBackColor = true;
+            StopPWM.Click += StopPWM_Click;
             // 
             // groupBox3
             // 
@@ -1314,14 +1303,25 @@ namespace ButtonEmulator
             groupBox4.TabStop = false;
             groupBox4.Text = "Настройки";
             // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new System.Drawing.Point(13, 614);
+            label4.Name = "label4";
+            label4.Size = new System.Drawing.Size(127, 15);
+            label4.TabIndex = 57;
+            label4.Text = "Сохранение настроек";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(1431, 706);
             ControlBox = false;
+            Controls.Add(label4);
             Controls.Add(groupBox3);
             Controls.Add(pictureBox1);
+            Controls.Add(buttonSavePWM);
             Controls.Add(groupBox4);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
@@ -1360,12 +1360,12 @@ namespace ButtonEmulator
             groupBox1.PerformLayout();
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)DelayBoxForPWM).EndInit();
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
             groupBox4.ResumeLayout(false);
             groupBox4.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         private void SpecialFeaturesButton_MouseEnter1(object sender, System.EventArgs e)
@@ -1463,11 +1463,11 @@ namespace ButtonEmulator
         private Button buttonSavePWM;
         private GroupBox groupBox1;
         private GroupBox groupBox2;
-        private NumericUpDown DelayBoxForPWM;
-        private Label label4;
         private GroupBox groupBox3;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private GroupBox groupBox4;
+        private Button StopPWM;
+        private Label label4;
     }
 }
 

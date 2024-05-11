@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using ButtonEmulator.Properties;
 // using Firmata;
 
 namespace ButtonEmulator
@@ -161,8 +162,11 @@ namespace ButtonEmulator
                 TopMost = false;
             }
 
-            //pwm
-            //todo: kiad pwm data
+            // settings
+            DutyCycleBox.Text = Properties.Settings.Default.PWMDutyCycle.ToString();
+            _txtCol1.Text = Properties.Settings.Default.txtcol1;
+            _txtCol2.Text = Properties.Settings.Default.txtcol2;
+            _txtCol3.Text = Properties.Settings.Default.txtcol3;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -227,13 +231,14 @@ namespace ButtonEmulator
             {
                 _buttonStart,
                 StartPWM,
+                StopPWM,
                 buttonSavePWM,
                 DutyCycleBox,
                 _txtCol1,
                 _txtCol2,
                 _txtCol3,
                 delayBox,
-                DelayBoxForPWM
+                //DelayBoxForPWM
             };
 
 
@@ -1093,7 +1098,7 @@ namespace ButtonEmulator
         private void StartPWM_Click(object sender, EventArgs e)
         {
             // start pwm
-            if(!int.TryParse(DutyCycleBox.Text, out int dutyCycle) ||
+            if (!int.TryParse(DutyCycleBox.Text, out int dutyCycle) ||
                 dutyCycle < 0 || dutyCycle > 255)
             {
                 MessageBox.Show("Скважность должна быть в пределах от 0 до 255");
@@ -1103,5 +1108,21 @@ namespace ButtonEmulator
             SendPWMCommand(dutyCycle);
         }
         #endregion
+
+
+        private void StopPWM_Click(object sender, EventArgs e)
+        {
+            SendPWMCommand(0);
+        }
+
+        private void buttonSavePWM_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.PWMDutyCycle = int.Parse(DutyCycleBox.Text);
+            Properties.Settings.Default.txtcol1 = _txtCol1.Text;
+            Properties.Settings.Default.txtcol2 = _txtCol2.Text;
+            Properties.Settings.Default.txtcol3 = _txtCol3.Text;
+            Properties.Settings.Default.Save();
+            Properties.Settings.Default.Reload();
+        }
     }
 }
