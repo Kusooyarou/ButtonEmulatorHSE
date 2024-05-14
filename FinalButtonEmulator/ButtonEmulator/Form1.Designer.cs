@@ -1316,7 +1316,7 @@ namespace ButtonEmulator
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(1431, 706);
+            ClientSize = new System.Drawing.Size(1427, 702);
             ControlBox = false;
             Controls.Add(label4);
             Controls.Add(groupBox3);
@@ -1330,12 +1330,15 @@ namespace ButtonEmulator
             Controls.Add(SpecialPanel);
             Controls.Add(SpecialFeaturesButton);
             Controls.Add(LoginUserPicture);
+            FormBorderStyle = FormBorderStyle.None;
             KeyPreview = true;
             Margin = new Padding(3, 4, 3, 4);
             MaximizeBox = false;
             MinimizeBox = false;
             MinimumSize = new System.Drawing.Size(20, 509);
             Name = "Form1";
+            ShowIcon = false;
+            ShowInTaskbar = false;
             SizeGripStyle = SizeGripStyle.Hide;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Button Emulator";

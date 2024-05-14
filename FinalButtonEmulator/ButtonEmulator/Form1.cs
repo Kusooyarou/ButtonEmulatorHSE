@@ -160,13 +160,14 @@ namespace ButtonEmulator
             if (taskManager.DisableLock)
             {
                 TopMost = false;
+                FormBorderStyle = FormBorderStyle.Sizable;
             }
 
             // settings
-            DutyCycleBox.Text = Properties.Settings.Default.PWMDutyCycle.ToString();
-            _txtCol1.Text = Properties.Settings.Default.txtcol1;
-            _txtCol2.Text = Properties.Settings.Default.txtcol2;
-            _txtCol3.Text = Properties.Settings.Default.txtcol3;
+            DutyCycleBox.Text = Settings.Default.PWMDutyCycle.ToString();
+            _txtCol1.Text = Settings.Default.txtcol1;
+            _txtCol2.Text = Settings.Default.txtcol2;
+            _txtCol3.Text = Settings.Default.txtcol3;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -1117,12 +1118,12 @@ namespace ButtonEmulator
 
         private void buttonSavePWM_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.PWMDutyCycle = int.Parse(DutyCycleBox.Text);
-            Properties.Settings.Default.txtcol1 = _txtCol1.Text;
-            Properties.Settings.Default.txtcol2 = _txtCol2.Text;
-            Properties.Settings.Default.txtcol3 = _txtCol3.Text;
-            Properties.Settings.Default.Save();
-            Properties.Settings.Default.Reload();
+            Settings.Default.PWMDutyCycle = int.Parse(DutyCycleBox.Text);
+            Settings.Default.txtcol1 = _txtCol1.Text;
+            Settings.Default.txtcol2 = _txtCol2.Text;
+            Settings.Default.txtcol3 = _txtCol3.Text;
+            Settings.Default.Save();
+            Settings.Default.Reload();
         }
     }
 }
